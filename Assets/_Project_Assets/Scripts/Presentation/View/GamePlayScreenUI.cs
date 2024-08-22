@@ -33,6 +33,7 @@ namespace Scripts.Presentation.View
         private void OnStartGame(StartGameSignal signal)
         {
             flexibleGridLayout.AmountX = signal.GridSize.x;
+            flexibleGridLayout.AmountY = signal.GridSize.y;
             
             _controller.SpawnCards(signal.GridSize, cardUnitPrefab);
             Show();

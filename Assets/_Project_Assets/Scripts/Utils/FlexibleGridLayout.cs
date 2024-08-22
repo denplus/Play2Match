@@ -26,8 +26,8 @@ namespace Scripts.Utils
             constraint = Constraint.FixedColumnCount;
             constraintCount = AmountX;
             float x = (rectTransform.rect.size.x - padding.horizontal - spacing.x * (constraintCount - 1)) / constraintCount;
-            float sizeY = (Screen.height / (float)AmountY) - padding.bottom - padding.top;
-            cellSize = new Vector2(x, sizeY);
+            float y = (rectTransform.rect.size.y - padding.vertical - spacing.y * (AmountY - 1)) / AmountY;
+            cellSize = new Vector2(x, y);
         }
     }
 }
