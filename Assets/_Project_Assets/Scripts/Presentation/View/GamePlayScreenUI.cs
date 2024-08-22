@@ -39,6 +39,9 @@ namespace Scripts.Presentation.View
             backBtn.onClick.AddListener(BackMainMenu);
 
             _signalBus.Subscribe<StartGameSignal>(OnStartGame);
+
+            UpdateScore(0);
+            UpdateAttempt(0);
         }
 
         private void BackMainMenu()
@@ -52,11 +55,11 @@ namespace Scripts.Presentation.View
             
         }
 
-        public void IncreaseScore(int attempt) => 
-            attemptTxt.text = $"{TextConstance.Attempt}: {attempt}";
+        public void UpdateScore(int attempt) => 
+            scoreTxt.text = $"{TextConstance.Score}: {attempt}";
 
-        public void IncreaseAttempt(int score) => 
-            scoreTxt.text = $"{TextConstance.Score}: {score}";
+        public void UpdateAttempt(int score) => 
+            attemptTxt.text = $"{TextConstance.Attempt}: {score}";
 
         private void OnStartGame(StartGameSignal signal)
         {

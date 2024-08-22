@@ -1,6 +1,5 @@
 using System;
 using DG.Tweening;
-using Scripts.Data.Signals;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -12,13 +11,13 @@ namespace Scripts.Presentation.View
         [SerializeField] private Button cardBtn;
         [SerializeField] private Image cardImage;
 
-        public event Action<int> OnFlipCard = delegate { }; 
-        
+        public int Index { get; private set; }
+        public event Action<CardUnitView> OnFlipCard = delegate { };
+
         private SignalBus _signalBus;
         private RectTransform _rectTransform;
         private Sequence _sequence;
-        
-        private int _index;
+
 
         [Inject]
         private void Init(SignalBus signalBus)
@@ -34,7 +33,7 @@ namespace Scripts.Presentation.View
 
         public void SetData(int index)
         {
-            _index = index;
+            Index = index;
         }
 
         private void FlipCard()
@@ -45,19 +44,19 @@ namespace Scripts.Presentation.View
             _sequence.AppendInterval(1f);
             _sequence.Append(_rectTransform.DORotate(_rectTransform.rotation.eulerAngles + new Vector3(0, 0f, 0f), 1f));
             _sequence.Play();
-            
-            OnFlipCard?.Invoke(_index);
-            
-            Debug.Log(_index);
+
+            OnFlipCard?.Invoke(this);
+
+            Debug.Log(Index);
         }
 
-        public void SetImage(Sprite sprite) => 
+        public void SetImage(Sprite sprite) =>
             cardImage.sprite = sprite;
-        
+
         public void ResetAllSubscriptions() =>
             OnFlipCard = null;
 
-        private void OnDestroy() => 
+        private void OnDestroy() =>
             cardBtn.onClick.RemoveListener(FlipCard);
     }
 }

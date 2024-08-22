@@ -3383,6 +3383,8 @@ MonoBehaviour:
   flexibleGridLayout: {fileID: 914171509}
   cardUnitPrefab: {fileID: 233509182634156699, guid: 720677abb32557d4c8be2d76508f4a54, type: 3}
   cardHolder: {fileID: 914171508}
+  attemptTxt: {fileID: 2047425991}
+  scoreTxt: {fileID: 680756943}
 --- !u!4 &1622165932
 Transform:
   m_ObjectHideFlags: 0
