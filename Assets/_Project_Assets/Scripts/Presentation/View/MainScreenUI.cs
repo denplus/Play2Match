@@ -42,12 +42,8 @@ namespace Scripts.Presentation.View
 
             _signalBus.Subscribe<EndGameSignal>(PlayerEndGame);
 
-            ScoreDto prevScore = _persistentService.Load<ScoreDto>();
-            bestScoreTxt.text = $"{Utils.TextConstance.BestScore}: {prevScore.BestScore}";
+            UpdateBestScore();
         }
-
-        private void OpenSettings() =>
-            _controller.OpenSettings();
 
         private void StartGame()
         {
@@ -64,13 +60,22 @@ namespace Scripts.Presentation.View
 
             Hide();
         }
+        
+        private void OpenSettings()
+        {
+            _controller.OpenSettings();
+        }
 
         private void PlayerEndGame()
         {
+            UpdateBestScore();
+            Show();
+        }
+
+        private void UpdateBestScore()
+        {
             ScoreDto prevScore = _persistentService.Load<ScoreDto>();
             bestScoreTxt.text = $"{Utils.TextConstance.BestScore}: {prevScore.BestScore}";
-            
-            Show();
         }
 
         private void OnDestroy()

@@ -1,5 +1,5 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Scripts.Data;
 using Scripts.Data.ScriptableObject;
@@ -14,6 +14,8 @@ namespace Scripts.Presentation.Controllers
 {
     public class GamePlayScreenController
     {
+        public bool PauseGame { get; set; }
+
         private readonly SignalBus _signalBus;
         private readonly ISpawnService _spawnService;
         private readonly Transform _cardHolder;
@@ -28,6 +30,8 @@ namespace Scripts.Presentation.Controllers
         private int _score;
         private int _allAttempts;
         private int _comboAttempts;
+
+        private float _time;
 
         private List<int> _uniqueIndexes = new();
 
@@ -45,6 +49,8 @@ namespace Scripts.Presentation.Controllers
 
         public void ResetState()
         {
+            PauseGame = false;
+            _time = _view.TimerForRound;
             _score = 0;
             _allAttempts = 0;
             _comboAttempts = 0;
@@ -127,7 +133,7 @@ namespace Scripts.Presentation.Controllers
                 {
                     _comboAttempts = 0;
                 }
-                
+
                 _view.UpdateAttempt(_allAttempts);
                 _view.UpdateScore(_score);
                 _view.UpdateCombo(_comboAttempts + 1);
@@ -171,6 +177,23 @@ namespace Scripts.Presentation.Controllers
                 _persistentService.Save(new ScoreDto(_score));
 
             _signalBus.TryFire(new EndGameSignal(_score, true));
+        }
+
+        public IEnumerator TickTimer()
+        {
+            WaitForSeconds wait = new WaitForSeconds(1f);
+            while (_time > 0)
+            {
+                if (PauseGame == false)
+                {
+                    _time--;
+                    _view.UpdateTimer((int)_time);
+                }
+
+                yield return wait;
+            }
+            
+            _view.EndGame();
         }
 
         private List<int> GetRandomIndexes(int size)

@@ -6,5 +6,6 @@ namespace Scripts.Utils
         public const string Score = "Score";
         public const string Attempt = "Attempt";
         public const string Combo = "Combo";
+        public const string Timer = "Time left";
     }
 }
