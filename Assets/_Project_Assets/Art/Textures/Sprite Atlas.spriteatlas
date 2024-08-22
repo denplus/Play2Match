@@ -65,6 +65,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6abcde5532690f7469083f64ade3531b, type: 3}
   - {fileID: 21300000, guid: 7d9766650c5d4e940a6ffc2cc7333f15, type: 3}
   - {fileID: 21300000, guid: b3cff7657bb60cf4b99054755bb1ca31, type: 3}
+  - {fileID: 21300000, guid: cff98e26b77f9894eab423541f3b6ae5, type: 3}
   - {fileID: 21300000, guid: ec3a69364c1d3c74f9588de872b36615, type: 3}
   - {fileID: 21300000, guid: e7a6ee561578fa946bbb4ea487979eec, type: 3}
   - {fileID: 21300000, guid: 1e2d44868dd25aa4b90a64e48c63b024, type: 3}
@@ -104,6 +105,7 @@ SpriteAtlas:
   - Seahorse
   - TollTruck
   - Dolphin
+  - Card_back
   - Balloon
   - Shrimp
   - 4x4_white
