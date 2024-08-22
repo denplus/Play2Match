@@ -12,6 +12,7 @@ namespace Scripts.DI
             container.DeclareSignal<PlayerEndGameSignal>();
             container.DeclareSignal<StartGameSignal>();
             container.DeclareSignal<OpenSettingsSignal>();
+            container.DeclareSignal<CardFlipSignal>();
         }
     }
 }
