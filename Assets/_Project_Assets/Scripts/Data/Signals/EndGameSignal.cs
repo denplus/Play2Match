@@ -3,7 +3,7 @@ namespace Scripts.Data.Signals
     public class EndGameSignal
     {
         public int FinalScore;
-        public bool TimeFinish;
+        public readonly bool TimeFinish;
 
         public EndGameSignal(int finalScore, bool timeFinish)
         {

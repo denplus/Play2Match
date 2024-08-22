@@ -5,5 +5,6 @@ namespace Scripts.Utils
         public const string BestScore = "Best score";
         public const string Score = "Score";
         public const string Attempt = "Attempt";
+        public const string Combo = "Combo";
     }
 }

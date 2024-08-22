@@ -1,4 +1,4 @@
-﻿using Scripts.Services.Services.Interfaces;
+﻿using Scripts.Services.Interfaces;
 using UnityEngine;
 using Zenject;
 

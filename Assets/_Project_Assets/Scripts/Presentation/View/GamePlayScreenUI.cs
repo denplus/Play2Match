@@ -3,7 +3,6 @@ using Scripts.Data.ScriptableObject;
 using Scripts.Data.Signals;
 using Scripts.Presentation.Controllers;
 using Scripts.Services.Interfaces;
-using Scripts.Services.Services.Interfaces;
 using Scripts.Utils;
 using TMPro;
 using UnityEngine;
@@ -28,6 +27,7 @@ namespace Scripts.Presentation.View
 
         [Header("Text"), SerializeField] private TMP_Text attemptTxt;
         [SerializeField] private TMP_Text scoreTxt;
+        [SerializeField] private TMP_Text comboTxt;
 
         private SignalBus _signalBus;
         private GamePlayScreenController _controller;
@@ -42,17 +42,18 @@ namespace Scripts.Presentation.View
         private void Start()
         {
             pauseBtn.onClick.AddListener(PauseGame);
-            backBtn.onClick.AddListener(BackMainMenu);
+            backBtn.onClick.AddListener(EndGame);
 
             _signalBus.Subscribe<StartGameSignal>(OnStartGame);
 
             UpdateScore(0);
             UpdateAttempt(0);
+            UpdateCombo(1);
         }
 
-        private void BackMainMenu()
+        public void EndGame()
         {
-            _controller.EndGame();
+            _controller.GameOver();
             flexibleGridLayout.enabled = true;
             Hide();
         }
@@ -67,6 +68,9 @@ namespace Scripts.Presentation.View
 
         public void UpdateAttempt(int score) =>
             attemptTxt.text = $"{TextConstance.Attempt}: {score}";
+        
+        public void UpdateCombo(int combo) =>
+            comboTxt.text = $"{TextConstance.Combo}: x{combo}";
 
         private async void OnStartGame(StartGameSignal signal)
         {
@@ -75,10 +79,11 @@ namespace Scripts.Presentation.View
 
             _controller.ResetState();
             _controller.SpawnCards(signal.GridSize, cardUnitPrefab);
-            
+
             UpdateScore(0);
             UpdateAttempt(0);
-            
+            UpdateCombo(1);
+
             Show();
 
             await UniTask.Delay(200); // wait and disable grid layout setter
@@ -88,7 +93,7 @@ namespace Scripts.Presentation.View
         private void OnDestroy()
         {
             pauseBtn.onClick.RemoveListener(PauseGame);
-            backBtn.onClick.RemoveListener(BackMainMenu);
+            backBtn.onClick.RemoveListener(EndGame);
 
             _signalBus.TryUnsubscribe<StartGameSignal>(OnStartGame);
         }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Scripts.Services.Services.Interfaces
+namespace Scripts.Services.Interfaces
 {
     public interface ISpawnService
     {

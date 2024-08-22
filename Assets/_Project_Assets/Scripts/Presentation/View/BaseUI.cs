@@ -7,7 +7,7 @@ namespace Scripts.Presentation.View
     {
         [SerializeField] protected CanvasGroup canvasGroup;
 
-        protected virtual UniTask Show()
+        protected virtual UniTask Show() // can be overridden to add some animations on show
         {
             canvasGroup.alpha = 1f;
             canvasGroup.interactable = true;
@@ -15,7 +15,7 @@ namespace Scripts.Presentation.View
             return UniTask.CompletedTask;
         }
 
-        protected virtual UniTask Hide()
+        protected virtual UniTask Hide() // can be overridden to add some animations on hide
         {
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;

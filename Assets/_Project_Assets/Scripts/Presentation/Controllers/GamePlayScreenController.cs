@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Scripts.Data;
 using Scripts.Data.ScriptableObject;
 using Scripts.Data.Signals;
 using Scripts.Presentation.View;
 using Scripts.Services.Interfaces;
-using Scripts.Services.Services.Interfaces;
+using Scripts.Utils;
 using UnityEngine;
 using Zenject;
 
@@ -25,7 +26,10 @@ namespace Scripts.Presentation.Controllers
 
         private CardUnitView _prevCard;
         private int _score;
-        private int _attempts;
+        private int _allAttempts;
+        private int _comboAttempts;
+
+        private List<int> _uniqueIndexes = new();
 
         public GamePlayScreenController(GamePlayScreenUI view, SignalBus signalBus, ISpawnService spawnService, Transform cardHolder, CardImagesData cardImagesData,
             Transform inputBlocker, IPersistentService persistentService)
@@ -42,16 +46,19 @@ namespace Scripts.Presentation.Controllers
         public void ResetState()
         {
             _score = 0;
-            _attempts = 0;
+            _allAttempts = 0;
+            _comboAttempts = 0;
             _prevCard = null;
         }
 
-        public void SpawnCards(Vector2Int signalGridSize, CardUnitView cardUnitPrefab)
+        public async void SpawnCards(Vector2Int signalGridSize, CardUnitView cardUnitPrefab)
         {
-            List<int> uniqueIndexes = GetRandomIndexes(signalGridSize.x * signalGridSize.y / 2);
-            List<int> allIndexes = new List<int>();
-            allIndexes.AddRange(uniqueIndexes);
-            allIndexes.AddRange(uniqueIndexes);
+            _uniqueIndexes.Clear();
+            _uniqueIndexes = GetRandomIndexes(signalGridSize.x * signalGridSize.y / 2);
+            List<int> doubledIndexes = new List<int>();
+            doubledIndexes.AddRange(_uniqueIndexes);
+            doubledIndexes.AddRange(_uniqueIndexes);
+            doubledIndexes.Shuffle();
 
             _spawnedCards.ForEach(x => x.gameObject.SetActive(false));
 
@@ -60,9 +67,9 @@ namespace Scripts.Presentation.Controllers
                 for (int y = 0; y < signalGridSize.y; y++)
                 {
                     int gridIndex = x * signalGridSize.y + y;
-                    int imageIndex = allIndexes[gridIndex];
+                    int imageIndex = doubledIndexes[gridIndex];
 
-                    if (_spawnedCards.Count > gridIndex)
+                    if (_spawnedCards.Count > gridIndex) // use already instantiated cards (like object pool) 
                     {
                         _spawnedCards[gridIndex].gameObject.SetActive(true);
                         _spawnedCards[gridIndex].ResetAllSubscriptions();
@@ -70,7 +77,7 @@ namespace Scripts.Presentation.Controllers
                         _spawnedCards[gridIndex].SetData(imageIndex);
                         _spawnedCards[gridIndex].SetImage(_cardImagesData.CardImages[imageIndex]);
                     }
-                    else
+                    else // instantiate new card
                     {
                         CardUnitView card = _spawnService.BindGetUnit(cardUnitPrefab, _cardHolder);
                         card.ResetAllSubscriptions();
@@ -81,6 +88,19 @@ namespace Scripts.Presentation.Controllers
                     }
                 }
             }
+
+            await ShowCardOnStart();
+        }
+
+        private async UniTask ShowCardOnStart()
+        {
+            _inputBlocker.gameObject.SetActive(true);
+
+            _spawnedCards.ForEach(x => x.AnimateFlip(true));
+            await UniTask.Delay((int)(_view.DelayForImageShow * 2 * 1000));
+            _spawnedCards.ForEach(x => x.AnimateFlip(false));
+
+            _inputBlocker.gameObject.SetActive(false);
         }
 
         private async void OnFlipCard(CardUnitView cardUnitView)
@@ -88,47 +108,63 @@ namespace Scripts.Presentation.Controllers
             _inputBlocker.gameObject.SetActive(true);
 
             _signalBus.TryFire(new CardFlipSignal());
-            
-            if (_prevCard != null)
+
+            if (_prevCard == null) // first card selected
             {
-                _attempts++;
-                _view.UpdateAttempt(_attempts);
+                _prevCard = cardUnitView;
+            }
+            else // second card selected
+            {
+                _allAttempts++;
 
-                if (_prevCard.Index == cardUnitView.Index)
+                bool rightAnswer = _prevCard.Index == cardUnitView.Index;
+                if (rightAnswer)
                 {
-                    _score++;
-                    _view.UpdateScore(_score);
+                    _score += 1 + _comboAttempts;
+                    _comboAttempts++;
+                }
+                else
+                {
+                    _comboAttempts = 0;
+                }
+                
+                _view.UpdateAttempt(_allAttempts);
+                _view.UpdateScore(_score);
+                _view.UpdateCombo(_comboAttempts + 1);
 
+                if (rightAnswer) // right match
+                {
                     await UniTask.Delay((int)(_view.DelayForImageShow * 1000));
-                    
+
                     _signalBus.TryFire(new CardMatchStateSignal(true));
 
                     _prevCard.gameObject.SetActive(false);
                     cardUnitView.gameObject.SetActive(false);
+
+                    _uniqueIndexes.Remove(cardUnitView.Index);
                 }
-                else
+                else // wrong match
                 {
                     await UniTask.Delay((int)(_view.DelayForImageShow * 1000));
-                    
+
                     _signalBus.TryFire(new CardMatchStateSignal(false));
 
-                    _prevCard.FlipBack();
-                    cardUnitView.FlipBack();
+                    _prevCard.AnimateFlip(false);
+                    cardUnitView.AnimateFlip(false);
 
-                    await UniTask.Delay((int)(cardUnitView.AnimationDuration * 1000)); // wait for animation to finish
+                    await UniTask.Delay((int)(cardUnitView.AnimationDuration * 1000)); // wait for flip animation to finish
                 }
 
                 _prevCard = null;
             }
-            else
-            {
-                _prevCard = cardUnitView;
-            }
+
+            if (_uniqueIndexes.Count == 0) // all cards is match, fire end game signal
+                _view.EndGame();
 
             _inputBlocker.gameObject.SetActive(false);
         }
 
-        public void EndGame()
+        public void GameOver()
         {
             ScoreDto prevScore = _persistentService.Load<ScoreDto>();
             if (prevScore.BestScore < _score)
@@ -143,7 +179,8 @@ namespace Scripts.Presentation.Controllers
             List<int> indexes = new List<int>(count);
             for (int i = 0; i < count; i++)
                 indexes.Add(i);
-            return Utils.ListUtil.GetUniqueElementsList(indexes, size);
+
+            return ListUtil.GetUniqueElementsList(indexes, size);
         }
     }
 }

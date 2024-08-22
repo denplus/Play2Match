@@ -11,21 +11,17 @@ namespace Scripts.Presentation.View
         [SerializeField] private Image cardImage;
 
         public int Index { get; private set; }
-        public float AnimationDuration { get; private set; } = 0.75f;
+        public float AnimationDuration => 0.75f;
         public event Action<CardUnitView> OnFlipCard = delegate { };
 
         private RectTransform _rectTransform;
         private RectTransform RectTransform => _rectTransform ??= GetComponent<RectTransform>();
 
-        private void Start()
-        {
-            cardBtn.onClick.AddListener(FlipCard);
-        }
+        private void Start() => 
+            cardBtn.onClick.AddListener(CardClick);
 
-        private void OnEnable()
-        {
+        private void OnEnable() => 
             RectTransform.rotation = Quaternion.Euler(Vector3.zero);
-        }
 
         public void SetData(int index)
         {
@@ -33,14 +29,17 @@ namespace Scripts.Presentation.View
             RectTransform.rotation = Quaternion.Euler(Vector3.zero);
         }
 
-        private void FlipCard()
+        private void CardClick()
         {
-            RectTransform.DORotate(RectTransform.rotation.eulerAngles + new Vector3(0, 90f, 0f), AnimationDuration);
+            AnimateFlip(true);
             OnFlipCard?.Invoke(this);
         }
 
-        public void FlipBack() => 
-            RectTransform.DORotate(RectTransform.rotation.eulerAngles + new Vector3(0, -90f, 0f), AnimationDuration);
+        public void AnimateFlip(bool showCard)
+        {
+            Vector3 rotate = Vector3.up * (showCard ? 90f : -90f); 
+            RectTransform.DORotate(RectTransform.rotation.eulerAngles + rotate, AnimationDuration);
+        }
 
         public void SetImage(Sprite sprite) =>
             cardImage.sprite = sprite;
@@ -49,6 +48,6 @@ namespace Scripts.Presentation.View
             OnFlipCard = null;
 
         private void OnDestroy() =>
-            cardBtn.onClick.RemoveListener(FlipCard);
+            cardBtn.onClick.RemoveListener(CardClick);
     }
 }
