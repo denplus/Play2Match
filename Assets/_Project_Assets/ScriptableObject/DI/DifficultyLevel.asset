@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ddfb5bc100b418e8106243f99b5cd3c, type: 3}
   m_Name: DifficultyLevel
   m_EditorClassIdentifier: 
-  gridSizes:
+  <GridSizes>k__BackingField:
   - {x: 2, y: 2}
+  - {x: 3, y: 2}
   - {x: 3, y: 3}
-  - {x: 4, y: 3}
+  - {x: 3, y: 4}
   - {x: 4, y: 4}
-  - {x: 5, y: 6}
-  - {x: 6, y: 4}
+  - {x: 5, y: 4}
   - {x: 5, y: 6}
