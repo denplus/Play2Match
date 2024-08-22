@@ -22,9 +22,7 @@ namespace Scripts.Presentation.Controllers
             _signalBus.TryFire(new StartGameSignal(_difficultyLevelData.GridSizes[clampIndex]));
         }
 
-        public void OpenSettings()
-        {
-            _signalBus.TryFire<OpenSettingsSignal>();
-        }
+        public void OpenSettings() => 
+            _signalBus.TryFire(new OpenSettingsSignal(true));
     }
 }

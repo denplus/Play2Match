@@ -74,6 +74,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 026c4dc8e7025b84d849631b612f0f58, type: 3}
   - {fileID: 21300000, guid: de614b19ed5eb2f42a1922238c85518b, type: 3}
   - {fileID: 21300000, guid: 7acd33f94c4346c469c0b79580e308da, type: 3}
+  - {fileID: 21300000, guid: 25a8497ad21725b4997edbd2fc6dd36d, type: 3}
   - {fileID: 21300000, guid: a26d9d7a7a984394ca3659f7b61b8598, type: 3}
   - {fileID: 21300000, guid: 04a5717bdb8268946a02f44ad284b954, type: 3}
   - {fileID: 21300000, guid: 6a1035bbb81d2654eb8bf089969e5c27, type: 3}
@@ -114,6 +115,7 @@ SpriteAtlas:
   - Ship
   - Turtle
   - Fish_1
+  - Close
   - Owl
   - Excavator
   - Thornback_ray

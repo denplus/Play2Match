@@ -38,7 +38,7 @@ namespace Scripts.Presentation.View
         private void Start()
         {
             startBtn.onClick.AddListener(StartGame);
-            startBtn.onClick.AddListener(OpenSettings);
+            settingsBtn.onClick.AddListener(OpenSettings);
 
             _signalBus.Subscribe<PlayerEndGameSignal>(PlayerEndGame);
 
@@ -76,7 +76,7 @@ namespace Scripts.Presentation.View
         private void OnDestroy()
         {
             startBtn.onClick.RemoveListener(StartGame);
-            startBtn.onClick.RemoveListener(OpenSettings);
+            settingsBtn.onClick.RemoveListener(OpenSettings);
 
             _signalBus.TryUnsubscribe<PlayerEndGameSignal>(PlayerEndGame);
         }
