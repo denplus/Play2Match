@@ -2727,7 +2727,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 305.59952, y: 246.08698}
+  m_CellSize: {x: 305.59952, y: 231.09491}
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 5
@@ -4481,7 +4481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 944299642}
-  <DelayForImageShow>k__BackingField: 1
+  <DelayForImageShow>k__BackingField: 0.75
   <TimerForRound>k__BackingField: 30
   pauseBtn: {fileID: 2143827331}
   backBtn: {fileID: 809212416}

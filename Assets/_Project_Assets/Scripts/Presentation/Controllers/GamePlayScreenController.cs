@@ -157,8 +157,6 @@ namespace Scripts.Presentation.Controllers
 
                     _prevCard.AnimateFlip(false);
                     cardUnitView.AnimateFlip(false);
-
-                    await UniTask.Delay((int)(cardUnitView.AnimationDuration * 1000)); // wait for flip animation to finish
                 }
 
                 _prevCard = null;

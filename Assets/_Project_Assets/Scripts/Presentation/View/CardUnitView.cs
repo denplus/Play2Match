@@ -11,7 +11,7 @@ namespace Scripts.Presentation.View
         [SerializeField] private Image cardImage;
 
         public int Index { get; private set; }
-        public float AnimationDuration => 0.75f;
+        public float AnimationDuration => 0.25f;
         public event Action<CardUnitView> OnFlipCard = delegate { };
 
         private RectTransform _rectTransform;
