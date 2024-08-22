@@ -8,10 +8,12 @@ namespace Scripts.DI
     public class ProjectDataInstaller : ScriptableObjectInstaller<ProjectDataInstaller>
     {
         [SerializeField] private DifficultyLevelData difficultyLevelData;
+        [SerializeField] private CardImagesData cardImagesData;
 
         public override void InstallBindings()
         {
             Container.BindInstance(difficultyLevelData);
+            Container.BindInstance(cardImagesData);
         }
     }
 }

@@ -4,9 +4,9 @@ namespace Scripts.Data.Signals
 {
     public class StartGameSignal
     {
-        public Vector2 GridSize;
+        public Vector2Int GridSize;
 
-        public StartGameSignal(Vector2 gridSize)
+        public StartGameSignal(Vector2Int gridSize)
         {
             GridSize = gridSize;
         }

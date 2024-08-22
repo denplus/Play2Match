@@ -10,6 +10,8 @@ namespace Scripts.DI
             SignalBusInstaller.Install(container);
 
             container.DeclareSignal<PlayerEndGameSignal>();
+            container.DeclareSignal<StartGameSignal>();
+            container.DeclareSignal<OpenSettingsSignal>();
         }
     }
 }

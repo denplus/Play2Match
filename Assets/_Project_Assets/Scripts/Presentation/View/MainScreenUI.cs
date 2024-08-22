@@ -10,7 +10,7 @@ using Zenject;
 
 namespace Scripts.Presentation.View
 {
-    public class GamePlayScreenView : MonoBehaviour
+    public class MainScreenUI : BaseUI
     {
         [SerializeField] private Button startBtn;
         [SerializeField] private Button settingsBtn;
@@ -19,16 +19,22 @@ namespace Scripts.Presentation.View
 
         [SerializeField] private TMP_Text bestScoreTxt;
 
-        private GamePlayScreenController _controller;
+        private MainScreenController _controller;
+        private SignalBus _signalBus;
 
         [Inject]
-        private void Init(SignalBus signalBus, DifficultyLevelData  difficultyLevelData) =>
-            _controller = new GamePlayScreenController(signalBus, difficultyLevelData);
+        private void Init(SignalBus signalBus, DifficultyLevelData difficultyLevelData)
+        {
+            _signalBus = signalBus;
+            _controller = new MainScreenController(signalBus, difficultyLevelData);
+        }
 
         private void Start()
         {
             startBtn.onClick.AddListener(StartGame);
             startBtn.onClick.AddListener(OpenSettings);
+
+            _signalBus.Subscribe<PlayerEndGameSignal>(PlayerEndGame);
         }
 
         private void OpenSettings() =>
@@ -46,12 +52,19 @@ namespace Scripts.Presentation.View
             }
 
             _controller.StartGame(index);
+
+            Hide();
         }
+
+        private void PlayerEndGame() =>
+            Show();
 
         private void OnDestroy()
         {
             startBtn.onClick.RemoveListener(StartGame);
             startBtn.onClick.RemoveListener(OpenSettings);
+
+            _signalBus.TryUnsubscribe<PlayerEndGameSignal>(PlayerEndGame);
         }
     }
 }

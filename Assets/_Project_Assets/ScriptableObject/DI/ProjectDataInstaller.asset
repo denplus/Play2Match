@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ProjectDataInstaller
   m_EditorClassIdentifier: 
   difficultyLevelData: {fileID: 11400000, guid: efe5e2b1bb37b2b4b86edaf050f6bb73, type: 2}
+  cardImagesData: {fileID: 11400000, guid: 79a162af3168f024ba4fafa5f964759d, type: 2}
