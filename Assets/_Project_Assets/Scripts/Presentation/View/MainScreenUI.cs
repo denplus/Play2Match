@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using Scripts.Data;
 using Scripts.Data.ScriptableObject;
 using Scripts.Data.Signals;
 using Scripts.Presentation.Controllers;
+using Scripts.Services.Interfaces;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +14,8 @@ namespace Scripts.Presentation.View
 {
     public class MainScreenUI : BaseUI
     {
+        [SerializeField] private MenuDialogUI menuDialogUI;
+        
         [SerializeField] private Button startBtn;
         [SerializeField] private Button settingsBtn;
 
@@ -21,11 +25,13 @@ namespace Scripts.Presentation.View
 
         private MainScreenController _controller;
         private SignalBus _signalBus;
+        private IPersistentService _persistentService;
 
         [Inject]
-        private void Init(SignalBus signalBus, DifficultyLevelData difficultyLevelData)
+        private void Init(SignalBus signalBus, DifficultyLevelData difficultyLevelData, IPersistentService persistentService)
         {
             _signalBus = signalBus;
+            _persistentService = persistentService;
             _controller = new MainScreenController(signalBus, difficultyLevelData);
         }
 
@@ -35,6 +41,9 @@ namespace Scripts.Presentation.View
             startBtn.onClick.AddListener(OpenSettings);
 
             _signalBus.Subscribe<PlayerEndGameSignal>(PlayerEndGame);
+
+            ScoreDto prevScore = _persistentService.Load<ScoreDto>();
+            bestScoreTxt.text = $"{Utils.TextConstance.BestScore}: {prevScore.BestScore}";
         }
 
         private void OpenSettings() =>
@@ -56,8 +65,13 @@ namespace Scripts.Presentation.View
             Hide();
         }
 
-        private void PlayerEndGame() =>
+        private void PlayerEndGame()
+        {
+            ScoreDto prevScore = _persistentService.Load<ScoreDto>();
+            bestScoreTxt.text = $"{Utils.TextConstance.BestScore}: {prevScore.BestScore}";
+            
             Show();
+        }
 
         private void OnDestroy()
         {
