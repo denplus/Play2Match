@@ -21,7 +21,6 @@ namespace Scripts.DI
             SignalBusInstall _ = new SignalBusInstall(projContainer);
             SignalBus signalBus = projContainer.Resolve<SignalBus>();
 
-            projContainer.Bind<ITimeService>().To<TimeService>().AsSingle();
             projContainer.Bind<IPersistentService>().FromInstance(_persistentService).AsSingle();
 
             ISpawnService spawnService = new SpawnService(projContainer);

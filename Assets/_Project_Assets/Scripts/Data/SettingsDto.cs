@@ -2,7 +2,7 @@ namespace Scripts.Data
 {
     public class SettingsDto
     {
-        public readonly bool IsSoundOn;
+        public bool IsSoundOn;
 
         public SettingsDto(bool isSoundOn)
         {

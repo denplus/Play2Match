@@ -2,7 +2,7 @@ namespace Scripts.Data
 {
     public class ScoreDto
     {
-        public readonly int BestScore;
+        public int BestScore;
 
         public ScoreDto(int score)
         {

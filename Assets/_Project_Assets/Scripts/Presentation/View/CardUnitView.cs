@@ -27,6 +27,7 @@ namespace Scripts.Presentation.View
         {
             Index = index;
             RectTransform.rotation = Quaternion.Euler(Vector3.zero);
+            cardBtn.interactable = true;
         }
 
         private void CardClick()
@@ -37,8 +38,9 @@ namespace Scripts.Presentation.View
 
         public void AnimateFlip(bool showCard)
         {
-            Vector3 rotate = Vector3.up * (showCard ? 90f : -90f); 
-            RectTransform.DORotate(RectTransform.rotation.eulerAngles + rotate, AnimationDuration);
+            cardBtn.interactable = !showCard;
+            Vector3 rotate = Vector3.up * (showCard ? 90f : 0f); 
+            RectTransform.DORotate(rotate, AnimationDuration);
         }
 
         public void SetImage(Sprite sprite) =>
