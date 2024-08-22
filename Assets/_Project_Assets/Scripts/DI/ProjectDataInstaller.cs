@@ -9,11 +9,13 @@ namespace Scripts.DI
     {
         [SerializeField] private DifficultyLevelData difficultyLevelData;
         [SerializeField] private CardImagesData cardImagesData;
+        [SerializeField] private SoundCollectionData soundCollectionData;
 
         public override void InstallBindings()
         {
             Container.BindInstance(difficultyLevelData);
             Container.BindInstance(cardImagesData);
+            Container.BindInstance(soundCollectionData);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Scripts.Presentation.View
             startBtn.onClick.AddListener(StartGame);
             settingsBtn.onClick.AddListener(OpenSettings);
 
-            _signalBus.Subscribe<PlayerEndGameSignal>(PlayerEndGame);
+            _signalBus.Subscribe<EndGameSignal>(PlayerEndGame);
 
             ScoreDto prevScore = _persistentService.Load<ScoreDto>();
             bestScoreTxt.text = $"{Utils.TextConstance.BestScore}: {prevScore.BestScore}";
@@ -78,7 +78,7 @@ namespace Scripts.Presentation.View
             startBtn.onClick.RemoveListener(StartGame);
             settingsBtn.onClick.RemoveListener(OpenSettings);
 
-            _signalBus.TryUnsubscribe<PlayerEndGameSignal>(PlayerEndGame);
+            _signalBus.TryUnsubscribe<EndGameSignal>(PlayerEndGame);
         }
     }
 }

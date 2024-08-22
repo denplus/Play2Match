@@ -1,4 +1,3 @@
-using System;
 using Scripts.Data;
 using Scripts.Data.Signals;
 using Scripts.Services.Interfaces;

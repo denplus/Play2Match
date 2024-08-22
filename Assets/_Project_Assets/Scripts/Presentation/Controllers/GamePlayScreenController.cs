@@ -87,6 +87,8 @@ namespace Scripts.Presentation.Controllers
         {
             _inputBlocker.gameObject.SetActive(true);
 
+            _signalBus.TryFire(new CardFlipSignal());
+            
             if (_prevCard != null)
             {
                 _attempts++;
@@ -98,6 +100,8 @@ namespace Scripts.Presentation.Controllers
                     _view.UpdateScore(_score);
 
                     await UniTask.Delay((int)(_view.DelayForImageShow * 1000));
+                    
+                    _signalBus.TryFire(new CardMatchStateSignal(true));
 
                     _prevCard.gameObject.SetActive(false);
                     cardUnitView.gameObject.SetActive(false);
@@ -105,6 +109,8 @@ namespace Scripts.Presentation.Controllers
                 else
                 {
                     await UniTask.Delay((int)(_view.DelayForImageShow * 1000));
+                    
+                    _signalBus.TryFire(new CardMatchStateSignal(false));
 
                     _prevCard.FlipBack();
                     cardUnitView.FlipBack();
@@ -128,7 +134,7 @@ namespace Scripts.Presentation.Controllers
             if (prevScore.BestScore < _score)
                 _persistentService.Save(new ScoreDto(_score));
 
-            _signalBus.TryFire(new PlayerEndGameSignal(_score));
+            _signalBus.TryFire(new EndGameSignal(_score, true));
         }
 
         private List<int> GetRandomIndexes(int size)

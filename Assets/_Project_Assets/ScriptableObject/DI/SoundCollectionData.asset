@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e22543a85542a7a5dc92e0881a4ac1, type: 3}
+  m_Name: SoundCollectionData
+  m_EditorClassIdentifier: 
+  <CardClip>k__BackingField: {fileID: 8300000, guid: 77d0395657dbb5c4abaebd86a51c3579, type: 3}
+  <Match>k__BackingField: {fileID: 8300000, guid: dfe149d5bc301924687580a08d040d15, type: 3}
+  <MisMatch>k__BackingField: {fileID: 8300000, guid: 754b00175f73dbc4489fb1798ea82a95, type: 3}
+  <GameEnd>k__BackingField: {fileID: 8300000, guid: 23f220f9696cced4f964ec7fce0b204c, type: 3}

@@ -9,10 +9,11 @@ namespace Scripts.DI
         {
             SignalBusInstaller.Install(container);
 
-            container.DeclareSignal<PlayerEndGameSignal>();
+            container.DeclareSignal<EndGameSignal>();
             container.DeclareSignal<StartGameSignal>();
             container.DeclareSignal<OpenSettingsSignal>();
             container.DeclareSignal<CardFlipSignal>();
+            container.DeclareSignal<CardMatchStateSignal>();
         }
     }
 }
